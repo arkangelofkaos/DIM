@@ -1,0 +1,15 @@
+{
+  "libs": [
+    "browser"
+  ],
+  "loadEagerly": [
+    "app/app/**/*.js"
+  ],
+  "plugins": {
+    "chrome-extension": {},
+    "es_modules": {},
+    "webpack": {
+      "configPath": "./config/webpack.js"
+    }
+  }
+}

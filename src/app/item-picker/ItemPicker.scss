@@ -1,0 +1,20 @@
+@import '../variables.scss';
+
+.item-picker {
+  .item-picker-search {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    .search-filter {
+      flex: 1;
+      margin-left: 0;
+      min-width: 0;
+    }
+  }
+  .sheet-contents > div {
+    padding: 8px;
+  }
+  .split-buttons {
+    margin-left: 8px;
+  }
+}

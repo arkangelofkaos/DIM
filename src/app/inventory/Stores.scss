@@ -1,0 +1,196 @@
+@import '../variables.scss';
+
+.inventory-content {
+  margin: 0 auto;
+
+  .title {
+    top: 124px;
+    z-index: 1;
+
+    .phone-portrait & {
+      top: 79px;
+    }
+  }
+
+  filter: var(--color-filter);
+  // Prevent collapsing at smaller than iPad landscape sizes
+  min-width: 1024px;
+  @include phone-portrait {
+    min-width: auto;
+  }
+}
+
+.store-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns:
+    repeat(
+      var(--num-characters),
+      calc(#{$equipped-item-total-outset} + var(--character-column-width) + var(--column-padding))
+    )
+    // Vault takes the rest
+    1fr;
+  box-sizing: border-box;
+
+  @include phone-portrait {
+    // Full-width, single column
+    grid-template-columns: 1fr;
+  }
+}
+
+.store-cell {
+  display: flex;
+  flex-direction: row;
+  padding: 0 var(--inventory-column-padding);
+  box-sizing: border-box;
+
+  &.vault {
+    min-width: calc(var(--character-column-width) + var(--inventory-column-padding));
+    background: rgba(0, 0, 0, 0.12);
+    .phone-portrait & {
+      background: transparent;
+    }
+  }
+
+  &.account-wide {
+    grid-column: 1 / span var(--num-characters);
+  }
+
+  &:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.2);
+    .phone-portrait & {
+      background-color: transparent;
+    }
+  }
+
+  > div {
+    white-space: normal;
+  }
+
+  // Engrams. D1 uses this same bucket hash for "Missions"
+  .destiny2 .bucket-375726501 & {
+    /* prettier-ignore */
+    --engram-size: calc(var(--character-column-width) / 10);
+
+    .empty-engram {
+      border: $item-border-width solid transparent;
+      box-sizing: border-box;
+      height: var(--item-size);
+      width: var(--item-size);
+    }
+
+    .sub-bucket {
+      min-height: 0;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 0;
+      padding: 4px 0 0 0;
+    }
+
+    .item-drag-container,
+    .empty-engram {
+      --item-size: var(--engram-size);
+      @include phone-portrait {
+        --item-size: calc((100vw - (2 * var(--inventory-column-padding))) / 10);
+      }
+    }
+  }
+
+  // Subclasses
+  .bucket-3284755031 & {
+    // hide normal "equipped" effects
+    .equipped-item {
+      border: $item-border-width solid transparent;
+      padding-top: 0;
+    }
+
+    .item-drag-container:hover {
+      // don't display the default outline when hovering over a draggable subclass item
+      outline: none;
+
+      // allow the pseudo-element to render outside the bounds of the item
+      contain: layout style;
+
+      // render a diamond-shaped pseudo-element to act as the border
+      &::before {
+        @include draggable-hover-border;
+        content: '';
+        position: absolute;
+        width: var(--item-size);
+        height: var(--item-size);
+        transform: rotate(45deg) scale(0.78);
+        box-sizing: border-box;
+      }
+    }
+  }
+
+  // Postmaster - items above, collect button below
+  .bucket-215593132 & {
+    flex-direction: column;
+  }
+}
+
+.equipped-item {
+  border: $equipped-item-border solid #ddd;
+  height: fit-content;
+  padding: $equipped-item-padding;
+}
+
+.store-text {
+  padding-top: 5px;
+}
+.store-header {
+  position: fixed;
+  backface-visibility: hidden;
+  @include below-header;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  background-color: #313233;
+  filter: var(--color-filter);
+  .store-cell {
+    padding: 8px var(--inventory-column-padding) 6px var(--inventory-column-padding);
+    flex-direction: column;
+  }
+  @supports (position: sticky) {
+    position: sticky;
+  }
+  .body-scroll-lock & {
+    position: fixed;
+  }
+  &.sticky {
+    box-shadow: 0 1px 4px 0px black;
+  }
+  .phone-portrait & {
+    padding-left: 0;
+    overflow: hidden;
+    .store-cell {
+      margin: 0;
+      width: 100%;
+      padding: 8px 0 4px 0;
+    }
+    > div {
+      max-width: 250px;
+      margin: 0 auto;
+      overflow: visible !important;
+      .frame {
+        overflow: visible !important;
+        touch-action: none;
+      }
+    }
+  }
+}
+.stores {
+  display: block; // 77px margin to make room for the fixed header
+  margin-top: 77px;
+  @supports (position: sticky) {
+    margin-top: 0;
+  }
+}
+.dim-button.bucket-button {
+  align-self: center;
+  margin-bottom: 8px;
+  background-color: black;
+  &:hover {
+    background-color: #666;
+  }
+}

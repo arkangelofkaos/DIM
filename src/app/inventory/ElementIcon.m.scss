@@ -1,0 +1,10 @@
+.element {
+  width: calc(var(--item-size) / 6);
+  height: calc(var(--item-size) / 6);
+  margin-right: 1px;
+
+  &.lightBackground {
+    filter: brightness(75%) saturate(200%);
+    background-color: transparent !important;
+  }
+}
